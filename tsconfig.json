@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "build",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "strict": false
+  },
+  "exclude": [
+    "src/tests",
+    "node_modules",
+    "build",
+    "client"
+  ],
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true
+}
