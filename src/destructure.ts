@@ -1,28 +1,12 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { RequestQuery } from './reporter';
+import { IpInfoData } from './types';
 
 const dotEnv = dotenv.config();
 
 const token: string = process.env.IPINFO;
 
-interface IpInfoData {
-  data: {
-    ip: string;
-    city: string;
-    region: string;
-    country: string;
-    loc: string;
-    hostname: string;
-    org: string;
-  };
-}
-
-export interface Reply {
-  location: string;
-  data: string;
-  time: string;
-}
 
 const destructureRequest = async (request: RequestQuery) => {
   const ipInfo: IpInfoData = await axios(

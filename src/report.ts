@@ -1,26 +1,13 @@
 import dotenv from 'dotenv';
 import nm from 'nodemailer';
-import destructureRequest from './destructure';
-import { Reply } from './types';
 
-const dotEnv = dotenv.config();
+dotenv.config();
 
 const login: string = process.env.LOGIN;
 const pass: string = process.env.PASS;
 const recipient: string = process.env.RECIPIENT;
 
-const formText = (reply: Reply): string =>
-  `There is a new request.
-From:
-${JSON.stringify(reply.data)}
-On: ${reply.time}`;
-
-export interface RequestQuery {
-  ip: string;
-  time: string;
-}
-
-const report = async (request: RequestQuery) => {
+async function report(text: string, subject: string) {
   let transporter = nm.createTransport({
     host: 'smtp.yandex.com',
     port: 465,
@@ -31,16 +18,13 @@ const report = async (request: RequestQuery) => {
     }
   });
 
-  const reply: any = await destructureRequest(request);
-  const text = formText(reply);
-
   const mailOptions = {
     from: {
       name: 'Report',
       address: login
     },
     to: recipient,
-    subject: `New Request from ${reply.location}`,
+    subject,
     text
     // html
   };
@@ -55,6 +39,6 @@ const report = async (request: RequestQuery) => {
     }
   });
   return result;
-};
+}
 
-export default report;
+export { report };
