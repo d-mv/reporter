@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import nm from 'nodemailer';
+import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 
 dotenv.config();
 
@@ -7,7 +8,7 @@ const login: string = process.env.LOGIN;
 const pass: string = process.env.PASS;
 const recipient: string = process.env.RECIPIENT;
 
-async function report(text: string, subject: string) {
+async function report(text: string, subject: string, html?: string) {
   let transporter = nm.createTransport({
     host: 'smtp.yandex.com',
     port: 465,
@@ -18,7 +19,7 @@ async function report(text: string, subject: string) {
     }
   });
 
-  const mailOptions = {
+  let mailOptions:MailOptions = {
     from: {
       name: 'Report',
       address: login
@@ -26,8 +27,9 @@ async function report(text: string, subject: string) {
     to: recipient,
     subject,
     text
-    // html
   };
+  if (html) mailOptions = { ...mailOptions, html };
+
   let result = '';
   transporter.sendMail(mailOptions, (error: any, info: any) => {
     if (error) {

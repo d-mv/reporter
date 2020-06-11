@@ -5,8 +5,8 @@ interface IpInfoData {
     region: string;
     country: string;
     loc: string;
-    hostname: string;
     org: string;
+    timezone: string;
   };
 }
 
@@ -33,4 +33,16 @@ interface ReportRequest<T> {
   data: T;
 }
 
-export { IpInfoData, Reply, GeneralData, ReportRequest, ServerStatus };
+interface Visit {
+  ip: string;
+  date: string;
+  to: string;
+}
+
+interface VisitDetails {
+  location: string;
+  data: IpInfoData;
+  time: string;
+}
+
+export { IpInfoData, Reply, GeneralData, ReportRequest, ServerStatus, Visit, VisitDetails };
