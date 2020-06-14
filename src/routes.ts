@@ -16,4 +16,8 @@ router.post('/report', async (req: express.Request, res: express.Response) => {
   }
 });
 
+router.post('*', (_req: express.Request, res: express.Response) => {
+  res.send('n/a');
+});
+
 export default router;

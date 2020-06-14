@@ -25,18 +25,21 @@ interface ServerStatus {
   server: string;
   mode: string;
   status: string;
-  message: string;
+  message?: string;
+  recipients?: string[];
 }
 
 interface ReportRequest<T> {
   domain: string;
   data: T;
+  recipients?: string[];
 }
 
 interface Visit {
   ip: string;
   date: string;
   to: string;
+  recipients?: string[];
 }
 
 interface VisitDetails {
@@ -45,4 +48,12 @@ interface VisitDetails {
   time: string;
 }
 
-export { IpInfoData, Reply, GeneralData, ReportRequest, ServerStatus, Visit, VisitDetails };
+export {
+  IpInfoData,
+  Reply,
+  GeneralData,
+  ReportRequest,
+  ServerStatus,
+  Visit,
+  VisitDetails
+};

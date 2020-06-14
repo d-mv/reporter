@@ -4,9 +4,11 @@ import { IpInfoData } from '../types';
 
 dotenv.config();
 
-const token: string = process.env.IPINFO;
+const token: string = process.env.IPINFO ?? '';
 
-async function getIpInfo(ip: string): Promise<IpInfoData> {
+async function getIpInfo(ip: string): Promise<IpInfoData | Record<string,unknown>> {
+  if (!token || !ip) return {};
+
   const ipInfo = await axios(`https://ipinfo.io/${ip}/json?token=${token}`);
 
   return ipInfo as IpInfoData;

@@ -6,10 +6,10 @@ function visitHtml(ipinfo: IpInfoData, request: Visit): string {
   return `
 <div>
   <div>${capitalize(request.to)} has been visited.</div>
-  <br>
+  <br />
   <div><em>from:</em> ${ipinfo.data.city}, ${ipinfo.data.country}</div>
   <div><em>time:</em> ${makeDateTime(request.date)}</div>
-  <br>
+  <br />
   <div>Details:</div>
   <div><em>ip:</em> ${request.ip}</div>
   <div><em>city:</em> ${ipinfo.data.city}</div>
@@ -18,7 +18,15 @@ function visitHtml(ipinfo: IpInfoData, request: Visit): string {
   <div><em>city:</em> ${ipinfo.data.city}</div>
   <div><em>org:</em> ${ipinfo.data.org}</div>
   <div><em>timezone:</em> ${ipinfo.data.timezone}</div>
-<div>
+  <div style="display: flex;">
+    <em>map:</em>
+    <a
+      href="https://www.google.com/maps/@${ipinfo.data.loc},17z"
+      target="_blank"
+      >Google Maps</a
+    >
+  </div>
+</div>
 `;
 }
 

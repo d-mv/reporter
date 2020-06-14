@@ -1,41 +1,65 @@
-import { ReportRequest, ServerStatus, Visit } from './types';
+import { ReportRequest, ServerStatus, Visit, IpInfoData } from './types';
 import {
   serverStatusString,
   getIpInfo,
   visitHtml,
   capitalize,
   makeDateTime,
-  report
+  report,
+  logError
 } from './tools';
+import { isEmpty } from 'ramda';
 
 const { dir, log } = console;
 
 function serverStatusController(request: ServerStatus) {
-  report(serverStatusString(request), `[${request.server ?? 'Server'}] update`);
-  log('Sent:');
-  dir(request);
-  return true;
+  try {
+    report({
+      text: serverStatusString(request),
+      subject: `[${request.server ?? 'Server'}] update`,
+      recipients: request.recipients
+    });
+    log('Sent:');
+    dir(request);
+    return true;
+  } catch (err) {
+    logError('serverStatusController', err, request);
+    return false;
+  }
 }
 
 async function visitController(request: Visit) {
-  const data = await getIpInfo(request.ip);
-  const message = visitHtml(data, request);
+  try {
 
-  report(
-    `${capitalize(request.to)} has been visited at ${makeDateTime(request.date)}`,
-    `[${capitalize(request.to)}] visited`,
-    message
-  );
-  log('Sent:');
-  dir(request);
+    const data = await getIpInfo(request.ip);
+
+    if (isEmpty(data)) return;
+
+    const message = visitHtml(data as IpInfoData, request);
+
+    report({
+      text: `${capitalize(request.to)} has been visited at ${makeDateTime(request.date)}`,
+      subject: `[${capitalize(request.to)}] visited`,
+      html: message,
+      recipients: request.recipients
+    });
+    log('Sent:');
+    dir(request);
+    return true;
+  } catch (err) {
+    logError('visitController', err, request);
+    return false;
+  }
 }
 
 function domainController(request: ReportRequest<unknown>) {
   switch (request.domain) {
     case 'serverStatus':
-      return serverStatusController(request.data as ServerStatus);
+      serverStatusController(request.data as ServerStatus);
+      break;
     case 'visit':
-      return visitController(request.data as Visit);
+      visitController(request.data as Visit);
+      break;
   }
 }
 
